@@ -1,1 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>需求提交与反馈</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>提交你的需求</h1>
+        <textarea id="userInput" rows="4" placeholder="在这里输入你的需求..."></textarea>
+        <button onclick="submitRequest()">提交需求</button>
 
+        <h3>计算结果:</h3>
+        <div id="response">结果将在这里显示...</div>
+    </div>
+
+    <script>
+        function submitRequest() {
+            const userInput = document.getElementById('userInput').value;
+            
+            if (!userInput.trim()) {
+                alert('请输入需求！');
+                return;
+            }
+
+            // 假设后端API为 /api/process
+            fetch('/api/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ input: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 将后端返回的结果显示在前端
+                document.getElementById('response').innerText = data.result;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('response').innerText = "处理失败，请重试！";
+            });
+        }
+    </script>
+</body>
+</html>
